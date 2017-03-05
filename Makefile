@@ -21,22 +21,22 @@ SYSTEM_INC := $(BASE)/system/include/
 SYSTEM_SRC := $(wildcard $(SYSTEM_DIR)/*.cpp)
 SYSTEM_OBJ := $(subst $(SYSTEM_DIR), $(BUILD_DIR), $(SYSTEM_SRC:%.cpp=%.o))
 
-all: $(TARGET) 
+all: $(TARGET)
 
 clean:
 	rm -rf $(TARGET) $(BUILD_DIR)/*
 
 $(TARGET): main.cpp $(BUILD_DIR)/base.a $(BUILD_DIR)/system.a
-	$(CXX) -ggdb $< -o $(TARGET)
-	
+	$(CXX) -ggdb -std=c++11 -I$(BASE_INC) -I$(SYSTEM_INC) $< -o $(TARGET)
+
 $(BASE_OBJ): $(BASE_SRC)
-	$(CXX) -ggdb -c $< -o $@ 
+	$(CXX) -ggdb -std=c++11 -I$(BASE_INC) -I$(SYSTEM_INC) -c $< -o $@
 
 $(BUILD_DIR)/base.a: $(BASE_OBJ)
 	$(AR) crs $@ $^
 
 $(SYSTEM_OBJ): $(SYSTEM_SRC)
-	$(CXX) -ggdb -c $< -o $@ 
+	$(CXX) -ggdb -std=c++11 -I$(SYSTEM_INC) -c $< -o $@
 
 $(BUILD_DIR)/system.a: $(SYSTEM_OBJ)
 	$(AR) crs $@ $^
