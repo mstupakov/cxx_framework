@@ -13,9 +13,8 @@ class Worker {
       std::cout << "Name: " << m_name << std::endl;
     }
 
-    void WakeUp(Work work) {
-
-      work();
+    void WakeUp(Work* work) {
+     (*work)();
     }
 };
 

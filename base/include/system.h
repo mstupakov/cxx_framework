@@ -6,6 +6,22 @@
 #include "wpool.h"
 #include "work.h"
 
+class MyWork_1: public Work {
+  public:
+    virtual int Do() {
+      std::cout << "! Func: " << __PRETTY_FUNCTION__ << std::endl;
+      return 0;
+    }
+};
+
+class MyWork_2: public Work {
+  public:
+    virtual int Do() {
+      std::cout << "! Func: " << __PRETTY_FUNCTION__ << std::endl;
+      return 0;
+    }
+};
+
 class System {
   Args m_args;
   WPool m_wpool;
@@ -22,17 +38,26 @@ class System {
     int Run() {
       std::cout << m_args.Has("-abc") << std::endl;
 
-      Work ww;
+      Work* ww = new Work();
       DoWork(ww, SYNC);
       DoWork(ww, ASYNC);
+
+      MyWork_1* mm1 = new MyWork_1();
+      DoWork(mm1, SYNC);
+      DoWork(mm1, ASYNC);
+
+      MyWork_2* mm2 = new MyWork_2();
+      DoWork(mm2, SYNC);
+      DoWork(mm2, ASYNC);
+
       return 0;
     }
 
-    int DoWork(Work &work, WType sync = SYNC) {
+    int DoWork(Work* work, WType sync = SYNC) {
       if (ASYNC == sync) {
         m_wpool.DoWork(work);
       } else {
-        work();
+        (*work)();
       }
     }
 };

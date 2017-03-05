@@ -21,7 +21,7 @@ class WPool {
   int m_nworker_free;
 
   Lock m_lock;
-  Queue<Work> m_queue;
+  Queue<Work*> m_queue;
   std::vector<WorkerInfo> m_workers;
 
   public:
@@ -40,13 +40,13 @@ class WPool {
       }
     }
 
-    int DoWork(Work work) {
+    int DoWork(Work* work) {
       m_lock.Take();
 
       WorkerInfo* info = FindFreeWorker();
       if (info) {
         m_nworker_free--;
-        work.m_done = std::bind(&WPool::ReleaseWorker, this, info);
+        work->RegWDone(std::bind(&WPool::ReleaseWorker, this, info));
 
         info->m_busy = true;
         info->m_worker.WakeUp(work);
@@ -66,8 +66,8 @@ class WPool {
           if (info) {
             m_nworker_free--;
 
-            Work work = m_queue.PopBegin();
-            work.m_done = std::bind(&WPool::ReleaseWorker, this, info);
+            Work* work = m_queue.PopBegin();
+            work->RegWDone(std::bind(&WPool::ReleaseWorker, this, info));
 
             info->m_busy = true;
             info->m_worker.WakeUp(work);
@@ -96,6 +96,8 @@ class WPool {
       info->m_busy = false;
       m_nworker_free++;
       m_lock.Give();
+
+      std::cout << "! Func: " <<__PRETTY_FUNCTION__ << std::endl;
     }
 };
 
