@@ -14,11 +14,11 @@ class Work {
     Work() : m_notify(false) {}
 
     int operator()() {
-      int rc = Do(); Done();
+      int rc = Execute(); Done();
       return rc;
     }
 
-    virtual int Do() {
+    virtual int Execute() {
       std::cout << "! Func: " << __PRETTY_FUNCTION__ << std::endl;
     }
 

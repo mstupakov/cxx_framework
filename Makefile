@@ -27,15 +27,15 @@ clean:
 	rm -rf $(TARGET) $(BUILD_DIR)/*
 
 $(TARGET): main.cpp $(BUILD_DIR)/base.a $(BUILD_DIR)/system.a
-	$(CXX) -ggdb -std=c++11 -I$(BASE_INC) -I$(SYSTEM_INC) $< -o $(TARGET)
+	$(CXX) -ggdb -std=c++11 -I$(BASE_INC) -I$(SYSTEM_INC) $^ -pthread -o $(TARGET)
 
-$(BASE_OBJ): $(BASE_SRC)
+$(BUILD_DIR)/%.o: $(BASE_DIR)/%.cpp
 	$(CXX) -ggdb -std=c++11 -I$(BASE_INC) -I$(SYSTEM_INC) -c $< -o $@
 
 $(BUILD_DIR)/base.a: $(BASE_OBJ)
 	$(AR) crs $@ $^
 
-$(SYSTEM_OBJ): $(SYSTEM_SRC)
+$(BUILD_DIR)/%.o: $(SYSTEM_DIR)/%.cpp
 	$(CXX) -ggdb -std=c++11 -I$(SYSTEM_INC) -c $< -o $@
 
 $(BUILD_DIR)/system.a: $(SYSTEM_OBJ)
