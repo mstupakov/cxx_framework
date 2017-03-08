@@ -6,6 +6,8 @@ CC := $(CROSS_COMPILE)gcc
 CXX := $(CROSS_COMPILE)g++
 STRIP := $(CROSS_COMPILE)strip
 
+CFLAGS := -pg -ggdb -std=c++11 -O3 -static
+
 BASE := $(CURDIR)
 BUILD_DIR := $(BASE)/build/
 
@@ -24,21 +26,25 @@ SYSTEM_OBJ := $(subst $(SYSTEM_DIR), $(BUILD_DIR), $(SYSTEM_SRC:%.cpp=%.o))
 all: $(TARGET)
 
 clean:
-	rm -rf $(TARGET) $(BUILD_DIR)/*
+	rm -rf gmon.out $(TARGET)_gmon.dot $(TARGET) $(BUILD_DIR)/*
 
 $(TARGET): main.cpp $(BUILD_DIR)/base.a $(BUILD_DIR)/system.a
-	$(CXX) -ggdb -std=c++11 -I$(BASE_INC) -I$(SYSTEM_INC) $^ -pthread -o $(TARGET)
+	$(CXX) $(CFLAGS) -I$(BASE_INC) -I$(SYSTEM_INC) $^ -pthread -o $(TARGET)
 
 $(BUILD_DIR)/%.o: $(BASE_DIR)/%.cpp
-	$(CXX) -ggdb -std=c++11 -I$(BASE_INC) -I$(SYSTEM_INC) -c $< -o $@
+	$(CXX) $(CFLAGS) -I$(BASE_INC) -I$(SYSTEM_INC) -c $< -o $@
 
 $(BUILD_DIR)/base.a: $(BASE_OBJ)
 	$(AR) crs $@ $^
 
 $(BUILD_DIR)/%.o: $(SYSTEM_DIR)/%.cpp
-	$(CXX) -ggdb -std=c++11 -I$(SYSTEM_INC) -c $< -o $@
+	$(CXX) $(CFLAGS) -I$(SYSTEM_INC) -c $< -o $@
 
 $(BUILD_DIR)/system.a: $(SYSTEM_OBJ)
 	$(AR) crs $@ $^
 
-.PHONY: all clean
+gmon:
+	gprof $(TARGET) gmon.out | gprof2dot.py > $(TARGET)_gmon.dot
+	xdot $(TARGET)_gmon.dot
+
+.PHONY: all clean gmon

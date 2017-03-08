@@ -1,5 +1,5 @@
-#ifndef __TIME_H__
-#define __TIME_H__
+#ifndef __TIMER_H__
+#define __TIMER_H__
 
 namespace SYS {
   unsigned int Sleep(unsigned int sec);
@@ -7,5 +7,5 @@ namespace SYS {
   double GetCurrentTime();
 };
 
-#endif /* __TIME_H__ */
+#endif /* __TIMER_H__ */
 

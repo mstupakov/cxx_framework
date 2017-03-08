@@ -1,13 +1,28 @@
 #ifndef __LOCK_H__
 #define __LOCK_H__
 
+#include "mutex.h"
+
 class Lock {
-  bool m_state;
+  SYS::Lock m_lock;
 
   public:
-    Lock(bool state = false): m_state(state) {}
-    void Take() {}
-    void Give() {}
+    Lock(bool state = false) {
+      m_lock = SYS::CreateMutex();
+      if (state) {
+        Take();
+      } else {
+        Give();
+      }
+    }
+
+    void Take() {
+      SYS::LockMutex(m_lock);
+    }
+
+    void Give() {
+      SYS::UnLockMutex(m_lock);
+    }
 
     bool TryTake() { return true; }
 };

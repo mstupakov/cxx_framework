@@ -5,30 +5,36 @@
 #include <string>
 #include <functional>
 #include "work.h"
+#include "queue.h"
 #include "thread.h"
 #include "timer.h"
 
 class Worker {
   std::string m_name;
+  Queue<Work*> m_queue;
 
   public:
-    Worker(std::string name) : m_name(name) {
-      std::cout << "Name: " << m_name << " " << this << std::endl;
+    Worker(std::string name) : m_name(name), m_queue(100) {
+      std::cout << "! Func: " << __PRETTY_FUNCTION__ << 
+        " Worker: " << m_name << std::endl;
       SYS::CreateThread(&Worker::Task, this);
     }
 
     void WakeUp(Work* work) {
-     (*work)();
+      m_queue.PushBack(work);
     }
 
   private:
     static void* Task(void* arg) {
       Worker* worker = static_cast<Worker*>(arg);
 
-      std::cout << "Task: " << worker <<  "   " << arg << std::endl;
-      while (1) {
-        std::cout << "! Func: " << __PRETTY_FUNCTION__ << ", Name: " << worker->m_name << std::endl;
-        SYS::USleep(1000);
+      while (true) {
+        if (worker->m_queue.IsEmpty()) {
+          worker->m_queue.Wait();
+        }
+
+        Work* work = worker->m_queue.PopBegin();
+        (*work)();
       }
       return NULL;
     }

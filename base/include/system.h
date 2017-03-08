@@ -8,27 +8,14 @@
 #include "thread.h"
 #include "timer.h"
 
-class MyWork_1: public Work {
-  public:
-    virtual int Execute() {
-      std::cout << "! Func: " << __PRETTY_FUNCTION__ << std::endl;
-      return 0;
-    }
-};
-
-class MyWork_2: public Work {
-  public:
-    virtual int Exectute() {
-      std::cout << "! Func: " << __PRETTY_FUNCTION__ << std::endl;
-      return 0;
-    }
-};
+#define NUM_OF_WORKERS 3
+#define CICLES_PER_SEC 10
 
 class System {
   bool m_run;
 
   Args m_args;
-  WPool m_wpool;
+  WPool* m_wpool;
 
   public:
     enum WType {
@@ -37,7 +24,14 @@ class System {
     };
 
     System(Args args) :
-      m_run(false), m_args(args), m_wpool(4) {
+      m_run(false), m_args(args) {
+      int workers = NUM_OF_WORKERS;
+
+      if (m_args.Has("-w")) {
+        workers = std::stoi(m_args.Get("-w"));
+      }
+
+      m_wpool = new WPool(workers);
     }
 
     int Run() {
@@ -56,47 +50,26 @@ class System {
 
     int DoWork(Work* work, WType sync = SYNC) {
       if (ASYNC == sync) {
-        m_wpool.DoWork(work);
+        m_wpool->DoWork(work);
       } else {
         (*work)();
       }
     }
 
   private:
-    int Init() {
-      std::cout << "! Func: " << __PRETTY_FUNCTION__ << std::endl;
-      std::cout << m_args.Has("-abc") << std::endl;
-
-      Work* ww = new Work();
-      DoWork(ww, SYNC);
-      DoWork(ww, ASYNC);
-
-      MyWork_1* mm1 = new MyWork_1();
-      DoWork(mm1, SYNC);
-      DoWork(mm1, ASYNC);
-
-      MyWork_2* mm2 = new MyWork_2();
-      DoWork(mm2, SYNC);
-      DoWork(mm2, ASYNC);
-
-      return 0;
-    }
-
-    int DeInit() {
-      std::cout << "! Func: " << __PRETTY_FUNCTION__ << std::endl;
-      return 0;
-    }
+    int Init();
+    int DeInit();
 
     void MainLoop() {
       int i = 0;
 
       while (m_run) {
+        double start = SYS::GetCurrentTime();
 
-        m_wpool.Update();
-        SYS::USleep(100);
+        m_wpool->Update();
 
         std::cout << "! Func: " << __PRETTY_FUNCTION__ << std::endl;
-        i++; if (i >= 150) Stop();
+        SYS::USleep(start + 1000000 / CICLES_PER_SEC - SYS::GetCurrentTime());
       }
     }
 };
