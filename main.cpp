@@ -1,12 +1,12 @@
 #include <iostream>
 
 #include "args.h"
-#include "system.h"
+#include "wm.h"
 
 int main(int argc, char *argv[]) {
 
   try {
-    System(Args(argc, argv)).Run();
+    WM(Args(argc, argv)).Run();
   } catch (...) {
     std::cerr << "Unexpected error..." << std::endl;
   }

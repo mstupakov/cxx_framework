@@ -45,19 +45,19 @@ class WPool {
     int DoWork(Work* work) {
       m_lock.Take();
       m_queue.PushBack(work);
-      m_lock.Give();
 
       Schedule();
+      m_lock.Give();
     }
 
     void Update() {
+      m_lock.Take();
       Schedule();
+      m_lock.Give();
     }
 
   private:
     void Schedule() {
-      m_lock.Take();
-
       if (!m_queue.IsEmpty()) {
         do {
           WorkerInfo* info = FindFreeWorker();
@@ -72,8 +72,6 @@ class WPool {
           }
         } while (!m_queue.IsEmpty() && m_nworker_free);
       }
-
-      m_lock.Give();
     }
 
     WorkerInfo* FindFreeWorker() {
@@ -93,9 +91,9 @@ class WPool {
       m_lock.Take();
       info->m_busy = false;
       m_nworker_free++;
-      m_lock.Give();
 
       Schedule();
+      m_lock.Give();
     }
 };
 
