@@ -1,0 +1,132 @@
+digraph modules {
+ranksep=2.0
+weight=0.5
+rankdir=LR
+START    [image="function.png"]
+//FILE_IO       [image="function.png"]
+LDE_no00 [image="function.png"]
+LDE_no01 [image="function.png"]
+LDE_no02 [image="function.png"]
+LDE_no03 [image="function.png"]
+LDE_no04 [image="function.png"]
+LDE_no05 [image="function.png"]
+LDE_no06 [image="function.png"]
+LDE_no07 [image="function.png"]
+LDE_no08 [image="function.png"]
+LDE_no09 [image="function.png"]
+LDE_no10 [image="function.png"]
+LDE_no11 [image="function.png"]
+ISME_MOD_no00 [image="function.png"]
+ISME_MOD_no01 [image="function.png"]
+ISME_MOD_no02 [image="function.png"]
+PARSER_no00 [image="function.png"]
+PARSER_no01 [image="function.png"]
+URW_MOD_no00 [image="function.png"]
+URW_MOD_no01 [image="function.png"]
+MRE_no00 [image="function.png"]
+MRE_no01 [image="function.png"]
+SE_no00 [image="function.png"]
+SE_no01 [image="function.png"]
+// DMA_no00 [image="function.png"]
+// DMA_no01 [image="function.png"]
+HDR_BUFF_no00 [image="function.png"]
+HDR_BUFF_no01 [image="function.png"]
+MME [image="function.png"]
+ACM_no00 [image="function.png"]
+
+//FILE_IO -> PARSER_no00 [label="rxDmaSdeHdrTr"]
+//FILE_IO -> PARSER_no01 [label="rxDmaSdeHdrTr"]
+//FILE_IO -> PARSER_no00 [label="rxDmaSdeEopTr"]
+//FILE_IO -> PARSER_no01 [label="rxDmaSdeEopTr"]
+
+// DMA_no00 -> PARSER_no00 [label="FILLER"]
+// DMA_no00 -> PARSER_no01 [label="FILLER"]
+PARSER_no00 -> ISME_MOD_no00 [label="ismeIsmeTr"]
+PARSER_no01 -> ISME_MOD_no00 [label="ismeIsmeTr"]
+PARSER_no00 -> HDR_BUFF_no00 [label="hdrBuffReqTr;hdrBuffFreeptrTr",dir=both]
+PARSER_no00 -> HDR_BUFF_no00 [label="hdrBuffWrTr"]
+PARSER_no01 -> HDR_BUFF_no01 [label="hdrBuffReqTr;hdrBuffFreeptrTr",dir=both]
+PARSER_no01 -> HDR_BUFF_no01 [label="hdrBuffWrTr"]
+
+ISME_MOD_no00 -> LDE_no00 [label="ismeLdeMasterTr"]
+LDE_no00 -> ISME_MOD_no00 [label="ldeIsmeTr"]
+
+ISME_MOD_no00 -> LDE_no01 [label="ismeLdeMasterTr"]
+LDE_no01 -> ISME_MOD_no00 [label="ldeIsmeTr"]
+
+ISME_MOD_no00 -> LDE_no02 [label="ismeLdeMasterTr"]
+LDE_no02 -> ISME_MOD_no00 [label="ldeIsmeTr"]
+
+ISME_MOD_no00 -> LDE_no03 [label="ismeLdeMasterTr"]
+LDE_no03 -> ISME_MOD_no00 [label="ldeIsmeTr"]
+
+ISME_MOD_no01 -> LDE_no04 [label="ismeLdeMasterTr"]
+LDE_no04 -> ISME_MOD_no01 [label="ldeIsmeTr"]
+
+ISME_MOD_no01 -> LDE_no05 [label="ismeLdeMasterTr"]
+LDE_no05 -> ISME_MOD_no01 [label="ldeIsmeTr"]
+
+ISME_MOD_no01 -> LDE_no06 [label="ismeLdeMasterTr"]
+LDE_no06 -> ISME_MOD_no01 [label="ldeIsmeTr"]
+
+ISME_MOD_no01 -> LDE_no07 [label="ismeLdeMasterTr"]
+LDE_no07 -> ISME_MOD_no01 [label="ldeIsmeTr"]
+
+ISME_MOD_no02 -> LDE_no08 [label="ismeLdeMasterTr"]
+LDE_no08 -> ISME_MOD_no02 [label="ldeIsmeTr"]
+
+ISME_MOD_no02 -> LDE_no09 [label="ismeLdeMasterTr"]
+LDE_no09 -> ISME_MOD_no02 [label="ldeIsmeTr"]
+
+ISME_MOD_no02 -> LDE_no10 [label="ismeLdeMasterTr"]
+LDE_no10 -> ISME_MOD_no02 [label="ldeIsmeTr"]
+
+ISME_MOD_no02 -> LDE_no11 [label="ismeLdeMasterTr"]
+LDE_no11 -> ISME_MOD_no02 [label="ldeIsmeTr"]
+
+ISME_MOD_no00 -> ISME_MOD_no01 [label="ismeIsmeTr"]
+ISME_MOD_no00 -> ISME_MOD_no01 [label="ismeIsmeTr"]
+ISME_MOD_no01 -> ISME_MOD_no02 [label="ismeIsmeTr"]
+ISME_MOD_no01 -> ISME_MOD_no02 [label="ismeIsmeTr"]
+
+ISME_MOD_no02 -> URW_MOD_no00 [label="tokenIntfDfcTr"]
+ISME_MOD_no02 -> URW_MOD_no01 [label="tokenIntfDfcTr"]
+
+// Figure out: SE responds with two transactions
+LDE_no00 -> SE_no00 [dir="both",label="ldeSeReqTr;FILLER"]
+LDE_no01 -> SE_no01 [dir="both",label="ldeSeReqTr;FILLER"]
+LDE_no02 -> SE_no00 [dir="both",label="ldeSeReqTr;FILLER"]
+LDE_no03 -> SE_no01 [dir="both",label="ldeSeReqTr;FILLER"]
+LDE_no04 -> SE_no00 [dir="both",label="ldeSeReqTr;FILLER"]
+LDE_no05 -> SE_no01 [dir="both",label="ldeSeReqTr;FILLER"]
+LDE_no06 -> SE_no00 [dir="both",label="ldeSeReqTr;FILLER"]
+LDE_no07 -> SE_no01 [dir="both",label="ldeSeReqTr;FILLER"]
+LDE_no08 -> SE_no00 [dir="both",label="ldeSeReqTr;FILLER"]
+LDE_no09 -> SE_no01 [dir="both",label="ldeSeReqTr;FILLER"]
+LDE_no10 -> SE_no00 [dir="both",label="ldeSeReqTr;FILLER"]
+LDE_no11 -> SE_no01 [dir="both",label="ldeSeReqTr;FILLER"]
+
+LDE_no00 -> ACM_no00 [dir="both",label="acmReqTr;acmRsltTr"]
+
+URW_MOD_no00 -> MRE_no00 [label="urwMreTr"]
+URW_MOD_no00 -> MRE_no01 [label="urwMreTr"]
+URW_MOD_no01 -> MRE_no00 [label="urwMreTr"]
+URW_MOD_no01 -> MRE_no01 [label="urwMreTr"]
+
+HDR_BUFF_no00 -> URW_MOD_no00 [label="hdrBuffRdrespTr"]
+HDR_BUFF_no01 -> URW_MOD_no01 [label="hdrBuffRdrespTr"]
+
+// HDR_BUFF -> MRE_no00 [label="hdrBuffFreeptrTr"]
+// HDR_BUFF -> MRE_no01 [label="hdrBuffFreeptrTr"]
+
+MRE_no00 -> MME [label="mreMmeTr"]
+MRE_no01 -> MME [label="mreMmeTr"]
+
+MME -> ISME_MOD_no00 [label="mmePipegridTr"]
+
+// MRE_no00 -> SE_no00 [dir="both" label="FILLER"]
+// URW_MOD_no00 -> DMA_no01 [label="FILLER"]
+// URW_MOD_no01 -> DMA_no01 [label="FILLER"]
+//URW_MOD_no00 -> FILE_IO [label="FILLER"]
+//URW_MOD_no01 -> FILE_IO [label="FILLER"]
+}

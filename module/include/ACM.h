@@ -3,17 +3,19 @@
 
 #include <string>
 #include "module.h"
+#include "common.h"
 
 class ACM : public Module {
   public:
-    ACM() : Module("ACM", "None") {
+    ACM() : Module("ACM") {
       RegModule(this);
     }
 
-    ACM(std::string name) : Module("ACM", name) {}
+    ACM(std::string name, WType wtype) 
+      : Module("ACM", name, wtype) {}
 
-    virtual Module* Clone(std::string name) { 
-      return new ACM(name); 
+    virtual Module* Clone(std::string name, WType wtype) { 
+      return new ACM(name, wtype); 
     }
 
     virtual void Update() {}

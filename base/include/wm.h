@@ -26,6 +26,7 @@ class WM {
   struct BlockInfo {
     std::string type;
     std::string name;
+    bool sync;
   };
   
   struct ConnInfo {
@@ -84,12 +85,22 @@ class WM {
 
     void CreateInfrastructure();
 
-    Module* CreateModule(std::string type, std::string name) {
-      return Module::CreateModule(type, name);
+    Module* CreateModule(std::string type, std::string name, WType wtype) {
+      return Module::CreateModule(type, name, wtype);
     }
 
     void RegModule(Module* module) {
       m_modules.push_back(module);
+    }
+
+    Module* GetModuleByName(std::string module) {
+      for (auto it = m_modules.begin(); it != m_modules.end(); ++it) {
+        if (module == (*it)->GetName()) {
+          return *it;
+        }
+      }
+
+      throw Error();
     }
 
     void MainLoop() {

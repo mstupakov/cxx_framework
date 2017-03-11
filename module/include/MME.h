@@ -3,17 +3,19 @@
 
 #include <string>
 #include "module.h"
+#include "common.h"
 
 class MME : public Module {
   public:
-    MME() : Module("MME", "None") {
+    MME() : Module("MME") {
       RegModule(this);
     }
 
-    MME(std::string name) : Module("MME", name) {}
+    MME(std::string name, WType wtype) 
+      : Module("MME", name, wtype) {}
 
-    virtual Module* Clone(std::string name) { 
-      return new MME(name); 
+    virtual Module* Clone(std::string name, WType wtype) { 
+      return new MME(name, wtype); 
     }
 
     virtual void Update() {}

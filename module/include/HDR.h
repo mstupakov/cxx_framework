@@ -3,17 +3,19 @@
 
 #include <string>
 #include "module.h"
+#include "common.h"
 
 class HDR : public Module {
   public:
-    HDR() : Module("HDR", "None") {
+    HDR() : Module("HDR") {
       RegModule(this);
     }
 
-    HDR(std::string name) : Module("HDR", name) {}
+    HDR(std::string name, WType wtype) 
+      : Module("HDR", name, wtype) {}
 
-    virtual Module* Clone(std::string name) { 
-      return new HDR(name); 
+    virtual Module* Clone(std::string name, WType wtype) { 
+      return new HDR(name, wtype); 
     }
 
     virtual void Update() {}

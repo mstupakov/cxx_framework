@@ -71,10 +71,12 @@ void WM::GetBlockInfo(std::string line) {
   if (std::string::npos != line.find("image")) {
     std::vector<std::string> tokens = split(line, ' ');
     std::string type = split(tokens[0], '_')[0];
+    bool sync = (std::string::npos == line.find("thread"));
     
     BlockInfo info = {
       .type = type,
-      .name = tokens[0]
+      .name = tokens[0],
+      .sync = sync
     };
 
     m_blocks.push_back(info);
@@ -130,7 +132,8 @@ void WM::ParseGv(std::string name) {
 void WM::ShowModules() {
   std::cout << "--- Blocks:" << std::endl;
   for (auto it = m_blocks.begin(); it != m_blocks.end(); ++it) {
-    std::cout << "Type: " << it->type << ", name: " << it->name << std::endl;
+    std::cout << "Type: " << it->type << ", name: " << it->name 
+      << "  : sync: " << it->sync << std::endl;
   }
 
   std::cout << std::endl << std::endl;
@@ -152,8 +155,13 @@ void WM::ShowModules() {
 void WM::CreateInfrastructure() {
 
   for (auto it = m_blocks.begin(); it != m_blocks.end(); ++it) {
-    Module* obj = CreateModule(it->type, it->name);
+    Module* obj = CreateModule(it->type, it->name, it->sync ? SYNC : ASYNC);
     RegModule(obj);
+  }
+
+  for (auto it = m_connections.begin(); it != m_connections.end(); ++it) {
+    GetModuleByName(it->name_what)->Connect(GetModuleByName(it->name_with), 
+        it->is_direction_both);
   }
 }
 

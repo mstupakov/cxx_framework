@@ -3,17 +3,19 @@
 
 #include <string>
 #include "module.h"
+#include "common.h"
 
 class PARSER : public Module {
   public:
-    PARSER() : Module("PARSER", "None") {
+    PARSER() : Module("PARSER") {
       RegModule(this);
     }
 
-    PARSER(std::string name) : Module("PARSER", name) {}
+    PARSER(std::string name, WType wtype) 
+      : Module("PARSER", name, wtype) {}
 
-    virtual Module* Clone(std::string name) { 
-      return new PARSER(name); 
+    virtual Module* Clone(std::string name, WType wtype) { 
+      return new PARSER(name, wtype); 
     }
 
     virtual void Update() {}

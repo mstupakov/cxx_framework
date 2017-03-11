@@ -3,17 +3,19 @@
 
 #include <string>
 #include "module.h"
+#include "common.h"
 
 class LDE : public Module {
   public:
-    LDE() : Module("LDE", "None") {
+    LDE() : Module("LDE") {
       RegModule(this);
     }
 
-    LDE(std::string name) : Module("LDE", name) {}
+    LDE(std::string name, WType wtype) 
+      : Module("LDE", name, wtype) {}
 
-    virtual Module* Clone(std::string name) { 
-      return new LDE(name); 
+    virtual Module* Clone(std::string name, WType wtype) { 
+      return new LDE(name, wtype); 
     }
 
     virtual void Update() {}
