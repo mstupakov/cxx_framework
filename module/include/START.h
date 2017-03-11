@@ -11,15 +11,18 @@ class START : public Module {
       RegModule(this);
     }
 
-    START(std::string name, WType wtype) 
-      : Module("START", name, wtype) {}
+    START(MCloneInfo info) 
+      : Module("START", info) {}
 
-    virtual Module* Clone(std::string name, WType wtype) { 
-      return new START(name, wtype); 
+    virtual Module* Clone(MCloneInfo info) { 
+      return new START(info); 
     }
 
     virtual void Update() {}
-    virtual void Notify(Phase phase) {}
+    virtual void Notify(Phase phase) {
+      std::cout << "Module Name: "  << m_name 
+        << ", Phase Name: " << phase << std::endl;
+    }
 };
 
 #endif /* __START_H__ */

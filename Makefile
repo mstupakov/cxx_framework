@@ -6,7 +6,7 @@ CC := $(CROSS_COMPILE)gcc
 CXX := $(CROSS_COMPILE)g++
 STRIP := $(CROSS_COMPILE)strip
 
-CFLAGS := -pg -ggdb -std=c++11 -O0
+CFLAGS := -MMD -pg -ggdb -std=c++11 -O0
 
 BASE := $(CURDIR)
 BUILD_DIR := $(BASE)/build/
@@ -29,10 +29,12 @@ MODULE_INC := $(BASE)/module/include/
 MODULE_SRC := $(wildcard $(MODULE_DIR)/*.cpp)
 MODULE_OBJ := $(subst $(MODULE_DIR), $(BUILD_DIR), $(MODULE_SRC:%.cpp=%.o))
 
+DEPS := $(wildcard $(BUILD_DIR)/*.d)
+
 all: $(TARGET)
 
 clean:
-	rm -rf gmon.out $(TARGET)_gmon.dot $(TARGET) $(BUILD_DIR)/*
+	rm -rf gmon.out $(TARGET)_gmon.dot $(TARGET) $(BUILD_DIR)/* *.d
 
 $(TARGET): main.cpp $(BUILD_DIR)/base.a $(BUILD_DIR)/system.a $(BUILD_DIR)/module.a
 	$(CXX) $(CFLAGS) -I$(BASE_INC) -I$(SYSTEM_INC) $^ \
@@ -59,5 +61,7 @@ $(BUILD_DIR)/module.a: $(MODULE_OBJ)
 gmon:
 	gprof $(TARGET) gmon.out | /development/gprof2dot-master/gprof2dot.py > $(TARGET)_gmon.dot
 	xdot $(TARGET)_gmon.dot
+
+-include $(DEPS)
 
 .PHONY: all clean gmon

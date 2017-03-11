@@ -11,11 +11,11 @@ class MRE : public Module {
       RegModule(this);
     }
 
-    MRE(std::string name, WType wtype) 
-      : Module("MRE", name, wtype) {}
+    MRE(MCloneInfo info) 
+      : Module("MRE", info) {}
 
-    virtual Module* Clone(std::string name, WType wtype) { 
-      return new MRE(name, wtype); 
+    virtual Module* Clone(MCloneInfo info) { 
+      return new MRE(info); 
     }
 
     virtual void Update() {}

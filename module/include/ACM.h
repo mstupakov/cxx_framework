@@ -11,11 +11,11 @@ class ACM : public Module {
       RegModule(this);
     }
 
-    ACM(std::string name, WType wtype) 
-      : Module("ACM", name, wtype) {}
+    ACM(MCloneInfo info) 
+      : Module("ACM", info) {}
 
-    virtual Module* Clone(std::string name, WType wtype) { 
-      return new ACM(name, wtype); 
+    virtual Module* Clone(MCloneInfo info) { 
+      return new ACM(info); 
     }
 
     virtual void Update() {}

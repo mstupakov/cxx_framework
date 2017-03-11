@@ -11,11 +11,11 @@ class HDR : public Module {
       RegModule(this);
     }
 
-    HDR(std::string name, WType wtype) 
-      : Module("HDR", name, wtype) {}
+    HDR(MCloneInfo info) 
+      : Module("HDR", info) {}
 
-    virtual Module* Clone(std::string name, WType wtype) { 
-      return new HDR(name, wtype); 
+    virtual Module* Clone(MCloneInfo info) { 
+      return new HDR(info); 
     }
 
     virtual void Update() {}

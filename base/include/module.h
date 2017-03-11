@@ -3,22 +3,45 @@
 
 #include <string>
 #include <vector>
+#include "args.h"
 #include "common.h"
 #include "error.h"
 #include "transaction.h"
+#include "executer.h"
 
 class Module {
-  std::string m_type;
-  std::string m_name;
+  protected:
+    std::string m_type;
+    std::string m_name;
 
-  WType m_wtype;
-  std::vector<Module*> m_connections;
+    WType m_wtype;
+    Args* m_args;
+
+  private:
+    Executer* m_executer;
+
+    struct MConnInfo {
+      Module* module;
+      bool direction;
+    };
+
+  protected:
+    std::vector<MConnInfo> m_connections;
 
   public:
-    static Module* CreateModule(std::string type, std::string name, WType wtype) {
+    static Module* CreateModule(std::string type, 
+        std::string name, WType wtype, Args* args, Executer* exec) {
       for (auto it = m_modules.begin(); it != m_modules.end(); ++it) {
         if (type == (*it)->m_type) {
-          return (*it)->Clone(name, wtype);
+
+          MCloneInfo info = {
+            .name = name,
+            .wtype = wtype,
+            .args = args,
+            .executer = exec
+          };
+
+          return (*it)->Clone(info);
         }
       }
 
@@ -30,21 +53,45 @@ class Module {
     }
 
     void Connect(Module* module, bool direction) {
-      m_connections.push_back(module);
+      MConnInfo info = {
+        .module = module,
+        .direction = direction
+      };
+
+      m_connections.push_back(info);
     }
 
-    virtual Module* Clone(std::string name, WType wtype) = 0;
+    struct MCloneInfo {
+      std::string name;
+      WType wtype;
+      Args* args;
+      Executer* executer;
+    };
+
+    virtual Module* Clone(MCloneInfo info) = 0;
+
     virtual void Update() = 0;
     virtual void Notify(Phase phase) = 0;
 
-    virtual void Send(Transaction* tr) {}
+    virtual void Send(Transaction* tr) {
+      m_executer->DoWork(tr, m_wtype);
+    }
 
   protected:
+    void DoWork(Work* work, WType wtype) {
+      m_executer->DoWork(work, wtype);
+    }
+
     Module(std::string type)
       : m_type(type) {}
 
-    Module(std::string type, std::string name, WType wtype) 
-      : m_type(type), m_name(name), m_wtype(wtype) {}
+    Module(std::string type, MCloneInfo info) 
+      : m_type(type) {
+        m_name = info.name;
+        m_wtype = info.wtype;
+        m_args = info.args;
+        m_executer = info.executer;
+      }
 
     static void RegModule(Module* m) {
       m_modules.push_back(m);

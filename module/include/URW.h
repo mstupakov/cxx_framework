@@ -11,11 +11,11 @@ class URW : public Module {
       RegModule(this);
     }
 
-    URW(std::string name, WType wtype) 
-      : Module("URW", name, wtype) {}
+    URW(MCloneInfo info) 
+      : Module("URW", info) {}
 
-    virtual Module* Clone(std::string name, WType wtype) { 
-      return new URW(name, wtype); 
+    virtual Module* Clone(MCloneInfo info) { 
+      return new URW(info); 
     }
 
     virtual void Update() {}

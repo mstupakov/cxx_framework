@@ -3,6 +3,7 @@
 
 #include <queue>
 #include <unistd.h>
+#include "error.h"
 #include "mutex.h"
 
 template<class T>
@@ -20,6 +21,7 @@ class Queue {
 
     bool PushBack(T& element) {
       if (!m_nfree) {
+        throw Error();
         return false;
       }
 

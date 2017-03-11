@@ -2,7 +2,7 @@ digraph modules {
 ranksep=2.0
 weight=0.5
 rankdir=LR
-START    [image="function.png"]
+START    [image="thread.png"]
 FILE_IO  [image="function.png"]
 LDE_no00 [image="function.png"]
 LDE_no01 [image="function.png"]

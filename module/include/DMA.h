@@ -1,26 +1,26 @@
-#ifndef __LDE_h__
-#define __LDE_h__
+#ifndef __DMA_h__
+#define __DMA_h__
 
 #include <string>
 #include "module.h"
 #include "common.h"
 
-class LDE : public Module {
+class DMA : public Module {
   public:
-    LDE() : Module("LDE") {
+    DMA() : Module("DMA") {
       RegModule(this);
     }
 
-    LDE(MCloneInfo info) 
-      : Module("LDE", info) {}
+    DMA(MCloneInfo info) 
+      : Module("DMA", info) {}
 
     virtual Module* Clone(MCloneInfo info) { 
-      return new LDE(info); 
+      return new DMA(info); 
     }
 
     virtual void Update() {}
     virtual void Notify(Phase phase) {}
 };
 
-#endif /* __LDE_H__ */
+#endif /* __DMA_H__ */
 

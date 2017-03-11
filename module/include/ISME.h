@@ -11,11 +11,11 @@ class ISME : public Module {
       RegModule(this);
     }
 
-    ISME(std::string name, WType wtype) 
-      : Module("ISME", name, wtype) {}
+    ISME(MCloneInfo info) 
+      : Module("ISME", info) {}
 
-    virtual Module* Clone(std::string name, WType wtype) { 
-      return new ISME(name, wtype); 
+    virtual Module* Clone(MCloneInfo info) { 
+      return new ISME(info); 
     }
 
     virtual void Update() {}

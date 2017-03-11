@@ -101,7 +101,7 @@ void WM::GetConnInfo(std::string line) {
     ConnInfo info = {
       .name_what = tokens[0],
       .name_with = tokens[2],
-      .is_direction_both = dir,
+      .direction = dir,
       .labels = labels
     };
 
@@ -130,6 +130,7 @@ void WM::ParseGv(std::string name) {
 }
 
 void WM::ShowModules() {
+  std::cout << std::endl;
   std::cout << "--- Blocks:" << std::endl;
   for (auto it = m_blocks.begin(); it != m_blocks.end(); ++it) {
     std::cout << "Type: " << it->type << ", name: " << it->name 
@@ -147,7 +148,7 @@ void WM::ShowModules() {
     }
 
     std::cout << "Conn: " << it->name_what << " + " << it->name_with 
-      << "  : is_direction_both: " << it->is_direction_both 
+      << "  : direction: " << it->direction 
       << "  : labels: " << labels << std::endl;
   }
 }
@@ -161,7 +162,21 @@ void WM::CreateInfrastructure() {
 
   for (auto it = m_connections.begin(); it != m_connections.end(); ++it) {
     GetModuleByName(it->name_what)->Connect(GetModuleByName(it->name_with), 
-        it->is_direction_both);
+        it->direction);
+  }
+
+  GetModuleByName("START")->Send(new Transaction(GetModuleByName("START")));
+  GetModuleByName("START")->Send(new Transaction(GetModuleByName("START")));
+  GetModuleByName("START")->Send(new Transaction(GetModuleByName("START")));
+  GetModuleByName("START")->Send(new Transaction(GetModuleByName("START")));
+  GetModuleByName("START")->Send(new Transaction(GetModuleByName("START")));
+  GetModuleByName("START")->Send(new Transaction(GetModuleByName("START")));
+  GetModuleByName("START")->Send(new Transaction(GetModuleByName("START")));
+  GetModuleByName("START")->Send(new Transaction(GetModuleByName("START")));
+  GetModuleByName("START")->Send(new Transaction(GetModuleByName("START")));
+
+  for (int i = 0; i < 500000; i++) {
+    GetModuleByName("START")->Send(new Transaction(GetModuleByName("START")));
   }
 }
 

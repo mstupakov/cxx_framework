@@ -11,11 +11,11 @@ class SE : public Module {
       RegModule(this);
     }
 
-    SE(std::string name, WType wtype) 
-      : Module("SE", name, wtype) {}
+    SE(MCloneInfo info) 
+      : Module("SE", info) {}
 
-    virtual Module* Clone(std::string name, WType wtype) { 
-      return new SE(name, wtype); 
+    virtual Module* Clone(MCloneInfo info) { 
+      return new SE(info); 
     }
 
     virtual void Update() {}

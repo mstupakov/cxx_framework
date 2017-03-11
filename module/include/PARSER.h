@@ -11,11 +11,11 @@ class PARSER : public Module {
       RegModule(this);
     }
 
-    PARSER(std::string name, WType wtype) 
-      : Module("PARSER", name, wtype) {}
+    PARSER(MCloneInfo info) 
+      : Module("PARSER", info) {}
 
-    virtual Module* Clone(std::string name, WType wtype) { 
-      return new PARSER(name, wtype); 
+    virtual Module* Clone(MCloneInfo info) { 
+      return new PARSER(info); 
     }
 
     virtual void Update() {}

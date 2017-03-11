@@ -1,5 +1,5 @@
-#ifndef __SYSTEM_H__
-#define __SYSTEM_H__
+#ifndef __WM_H__
+#define __WM_H__
 
 #include <iostream>
 #include <string>
@@ -9,6 +9,7 @@
 #include "work.h"
 #include "common.h"
 #include "module.h"
+#include "executer.h"
 #include "thread.h"
 #include "timer.h"
 
@@ -20,7 +21,7 @@ class WM {
   bool m_run;
 
   Args m_args;
-  WPool* m_wpool;
+  Executer* m_executer;
   std::vector<Module*> m_modules;
 
   struct BlockInfo {
@@ -32,7 +33,7 @@ class WM {
   struct ConnInfo {
     std::string name_what;
     std::string name_with;
-    bool is_direction_both;
+    bool direction;
     std::vector<std::string> labels;
   };
 
@@ -48,7 +49,7 @@ class WM {
         workers = std::stoi(m_args.Get("-w"));
       }
 
-      m_wpool = new WPool(workers);
+      m_executer = new Executer(workers);
     }
 
     int Run() {
@@ -65,12 +66,9 @@ class WM {
       m_run = false;
     }
 
+  protected:
     int DoWork(Work* work, WType sync = SYNC) {
-      if (ASYNC == sync) {
-        m_wpool->DoWork(work);
-      } else {
-        (*work)();
-      }
+      return m_executer->DoWork(work, sync);
     }
 
   private:
@@ -86,7 +84,7 @@ class WM {
     void CreateInfrastructure();
 
     Module* CreateModule(std::string type, std::string name, WType wtype) {
-      return Module::CreateModule(type, name, wtype);
+      return Module::CreateModule(type, name, wtype, &m_args, m_executer);
     }
 
     void RegModule(Module* module) {
@@ -111,8 +109,6 @@ class WM {
       while (m_run) {
         double start = SYS::GetCurrentTime();
 
-        m_wpool->Update();
-
         std::for_each(m_modules.begin(), m_modules.end(), 
                       [this](Module* m) { m->Update(); });
 
@@ -125,5 +121,5 @@ class WM {
     }
 };
 
-#endif /* __SYSTEM_H__ */
+#endif /* __WM_H__ */
 
