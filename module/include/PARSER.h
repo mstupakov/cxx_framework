@@ -11,11 +11,11 @@ class PARSER : public Module {
       RegModule(this);
     }
 
-    PARSER(MCloneInfo info) 
+    PARSER(MCloneInfo info)
       : Module("PARSER", info) {}
 
-    virtual Module* Clone(MCloneInfo info) { 
-      return new PARSER(info); 
+    virtual Module* Clone(MCloneInfo info) {
+      return CloneModule(this, info);
     }
 
     virtual void Update() {}

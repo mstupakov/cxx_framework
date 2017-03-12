@@ -11,11 +11,11 @@ class DMA : public Module {
       RegModule(this);
     }
 
-    DMA(MCloneInfo info) 
+    DMA(MCloneInfo info)
       : Module("DMA", info) {}
 
-    virtual Module* Clone(MCloneInfo info) { 
-      return new DMA(info); 
+    virtual Module* Clone(MCloneInfo info) {
+      return CloneModule(this, info);
     }
 
     virtual void Update() {}

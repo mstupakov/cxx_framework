@@ -11,11 +11,11 @@ class HDR : public Module {
       RegModule(this);
     }
 
-    HDR(MCloneInfo info) 
+    HDR(MCloneInfo info)
       : Module("HDR", info) {}
 
-    virtual Module* Clone(MCloneInfo info) { 
-      return new HDR(info); 
+    virtual Module* Clone(MCloneInfo info) {
+      return CloneModule(this, info);
     }
 
     virtual void Update() {}

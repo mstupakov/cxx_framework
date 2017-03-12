@@ -93,6 +93,11 @@ class Module {
         m_executer = info.executer;
       }
 
+    template<typename T>
+      Module* CloneModule(const T* obj, MCloneInfo info) {
+        return new T(info);
+      }
+
     static void RegModule(Module* m) {
       m_modules.push_back(m);
     }

@@ -11,11 +11,11 @@ class LDE : public Module {
       RegModule(this);
     }
 
-    LDE(MCloneInfo info) 
+    LDE(MCloneInfo info)
       : Module("LDE", info) {}
 
-    virtual Module* Clone(MCloneInfo info) { 
-      return new LDE(info); 
+    virtual Module* Clone(MCloneInfo info) {
+      return CloneModule(this, info);
     }
 
     virtual void Update() {}

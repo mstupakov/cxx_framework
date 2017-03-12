@@ -11,11 +11,11 @@ class START : public Module {
       RegModule(this);
     }
 
-    START(MCloneInfo info) 
+    START(MCloneInfo info)
       : Module("START", info) {}
 
-    virtual Module* Clone(MCloneInfo info) { 
-      return new START(info); 
+    virtual Module* Clone(MCloneInfo info) {
+      return CloneModule(this, info);
     }
 
     virtual void Update() {}

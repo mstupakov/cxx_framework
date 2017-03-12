@@ -11,11 +11,11 @@ class MME : public Module {
       RegModule(this);
     }
 
-    MME(MCloneInfo info) 
+    MME(MCloneInfo info)
       : Module("MME", info) {}
 
-    virtual Module* Clone(MCloneInfo info) { 
-      return new MME(info); 
+    virtual Module* Clone(MCloneInfo info) {
+      return CloneModule(this, info);
     }
 
     virtual void Update() {}

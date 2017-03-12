@@ -11,11 +11,11 @@ class ACM : public Module {
       RegModule(this);
     }
 
-    ACM(MCloneInfo info) 
+    ACM(MCloneInfo info)
       : Module("ACM", info) {}
 
-    virtual Module* Clone(MCloneInfo info) { 
-      return new ACM(info); 
+    virtual Module* Clone(MCloneInfo info) {
+      return CloneModule(this, info);
     }
 
     virtual void Update() {}

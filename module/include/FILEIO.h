@@ -13,11 +13,11 @@ class FILEIO : public Module {
       RegModule(this);
     }
 
-    FILEIO(MCloneInfo info) 
+    FILEIO(MCloneInfo info)
       : Module("FILE", info) {}
 
-    virtual Module* Clone(MCloneInfo info) { 
-      return new FILEIO(info); 
+    virtual Module* Clone(MCloneInfo info) {
+      return CloneModule(this, info);
     }
 
     virtual void Update() {}

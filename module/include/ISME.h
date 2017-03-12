@@ -11,11 +11,11 @@ class ISME : public Module {
       RegModule(this);
     }
 
-    ISME(MCloneInfo info) 
+    ISME(MCloneInfo info)
       : Module("ISME", info) {}
 
-    virtual Module* Clone(MCloneInfo info) { 
-      return new ISME(info); 
+    virtual Module* Clone(MCloneInfo info) {
+      return CloneModule(this, info);
     }
 
     virtual void Update() {}

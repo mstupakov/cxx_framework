@@ -11,11 +11,11 @@ class URW : public Module {
       RegModule(this);
     }
 
-    URW(MCloneInfo info) 
+    URW(MCloneInfo info)
       : Module("URW", info) {}
 
-    virtual Module* Clone(MCloneInfo info) { 
-      return new URW(info); 
+    virtual Module* Clone(MCloneInfo info) {
+      return CloneModule(this, info);
     }
 
     virtual void Update() {}

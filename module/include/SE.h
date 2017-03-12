@@ -11,11 +11,11 @@ class SE : public Module {
       RegModule(this);
     }
 
-    SE(MCloneInfo info) 
+    SE(MCloneInfo info)
       : Module("SE", info) {}
 
-    virtual Module* Clone(MCloneInfo info) { 
-      return new SE(info); 
+    virtual Module* Clone(MCloneInfo info) {
+      return CloneModule(this, info);
     }
 
     virtual void Update() {}
